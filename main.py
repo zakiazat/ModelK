@@ -45,11 +45,15 @@ model = tf.keras.models.load_model("models/action_model.h5")
 model.summary()
 
 # Export video predictions
-def display_predictions(model, video_path, input_shape):
-    cap = cv2.VideoCapture(video_path)
+def display_predictions(model, input_shape):
+    cap = cv2.VideoCapture(0)  # Use 0 for the default webcam
     if not cap.isOpened():
-        print("Error: Could not open video.")
+        print("Error: Could not open webcam.")
         return
+
+    # Create a named window with HD resolution
+    cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Video", 1280, 720)
 
     frame_buffer = []
     while cap.isOpened():
@@ -73,6 +77,9 @@ def display_predictions(model, video_path, input_shape):
             # Display the frame with the predicted label
             label = f"Predicted: {predicted_class}"
             cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+            # Highlight detected movements
+            cv2.rectangle(frame, (10, 10), (frame.shape[1] - 10, frame.shape[0] - 10), (0, 255, 0), 2)
             cv2.imshow("Video", frame)
 
             # Remove the first frame from the buffer
@@ -85,5 +92,4 @@ def display_predictions(model, video_path, input_shape):
     cv2.destroyAllWindows()
 
 # Example usage
-video_path = "dataset/jumping/jumping.mp4"
-display_predictions(model, video_path, input_shape)
+display_predictions(model, input_shape)
