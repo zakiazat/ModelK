@@ -51,6 +51,7 @@ def display_predictions(model, video_path, input_shape):
         print("Error: Could not open video.")
         return
 
+    frame_buffer = []
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
@@ -59,16 +60,23 @@ def display_predictions(model, video_path, input_shape):
         # Preprocess the frame
         frame_resized = cv2.resize(frame, (input_shape[2], input_shape[1]))
         frame_normalized = frame_resized / 255.0
-        frame_expanded = np.expand_dims(frame_normalized, axis=0)
+        frame_buffer.append(frame_normalized)
 
-        # Make prediction
-        prediction = model.predict(frame_expanded)
-        predicted_class = np.argmax(prediction, axis=1)[0]
+        # Ensure the buffer has the correct number of frames
+        if len(frame_buffer) == input_shape[0]:
+            frame_sequence = np.expand_dims(frame_buffer, axis=0)
 
-        # Display the frame with the predicted label
-        label = f"Predicted: {predicted_class}"
-        cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        cv2.imshow("Video", frame)
+            # Make prediction
+            prediction = model.predict(frame_sequence)
+            predicted_class = np.argmax(prediction, axis=1)[0]
+
+            # Display the frame with the predicted label
+            label = f"Predicted: {predicted_class}"
+            cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.imshow("Video", frame)
+
+            # Remove the first frame from the buffer
+            frame_buffer.pop(0)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -77,5 +85,5 @@ def display_predictions(model, video_path, input_shape):
     cv2.destroyAllWindows()
 
 # Example usage
-video_path = "dataset\jumping\jumping.mp4"
+video_path = "dataset/jumping/jumping.mp4"
 display_predictions(model, video_path, input_shape)
