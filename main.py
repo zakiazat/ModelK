@@ -23,29 +23,26 @@ model = build_conv3d_model(input_shape, num_classes)
 model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test))
 
 # Save the trained model
-model.save("models/action_model.h5")
+model.save("models/action_model.keras")
 
-# Evaluate model
-# Open the HDF5 file
-file_path = "models/action_model.h5"
-with h5py.File(file_path, "r") as f:
-    # Print all root level groups
-    print("Root level groups:", list(f.keys()))
+# Load the trained model
+model = tf.keras.models.load_model("models/action_model.keras")
 
-    # Iterate through all groups and datasets
-    def print_attrs(name, obj):
-        print(f"{name}: {obj}")
+# Evaluate the model on the test set
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+print(f"Test Loss: {test_loss}")
+print(f"Test Accuracy: {test_accuracy}")
 
-    f.visititems(print_attrs)
+# Make predictions on the test set
+predictions = model.predict(X_test)
+predicted_classes = np.argmax(predictions, axis=1)
 
-# Load the model
-model = tf.keras.models.load_model("models/action_model.h5")
+# Display predictions along with actual labels
+for i in range(len(X_test)):
+    print(f"Actual: {y_test[i]}, Predicted: {predicted_classes[i]}")
 
-# Print the model summary
-model.summary()
-
-# Export video predictions
-def display_predictions(model, input_shape):
+# Function to display predictions in video form
+def display_predictions(model, input_shape, class_labels):
     cap = cv2.VideoCapture(0)  # Use 0 for the default webcam
     if not cap.isOpened():
         print("Error: Could not open webcam.")
@@ -73,9 +70,10 @@ def display_predictions(model, input_shape):
             # Make prediction
             prediction = model.predict(frame_sequence)
             predicted_class = np.argmax(prediction, axis=1)[0]
+            predicted_label = class_labels[predicted_class]
 
             # Display the frame with the predicted label
-            label = f"Predicted: {predicted_class}"
+            label = f"Predicted: {predicted_label}"
             cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
             # Highlight detected movements
@@ -92,4 +90,5 @@ def display_predictions(model, input_shape):
     cv2.destroyAllWindows()
 
 # Example usage
-display_predictions(model, input_shape)
+class_labels = ["no movement", "moving", "jumping"]  # Replace with your actual class labels
+display_predictions(model, input_shape, class_labels)
