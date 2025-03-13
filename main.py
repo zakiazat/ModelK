@@ -22,24 +22,17 @@ model = build_conv3d_model(input_shape, num_classes)
 # Train model
 model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test))
 
+# Ensure the models directory exists
+os.makedirs("models", exist_ok=True)
+
 # Save the trained model
-model.save("models/action_model.keras")
+model.save("models/action_model.h5")
 
-# Load the trained model
-model = tf.keras.models.load_model("models/action_model.keras")
+# Load the model
+model = tf.keras.models.load_model("models/action_model.h5")
 
-# Evaluate the model on the test set
-test_loss, test_accuracy = model.evaluate(X_test, y_test)
-print(f"Test Loss: {test_loss}")
-print(f"Test Accuracy: {test_accuracy}")
-
-# Make predictions on the test set
-predictions = model.predict(X_test)
-predicted_classes = np.argmax(predictions, axis=1)
-
-# Display predictions along with actual labels
-for i in range(len(X_test)):
-    print(f"Actual: {y_test[i]}, Predicted: {predicted_classes[i]}")
+# Print the model summary
+model.summary()
 
 # Function to display predictions in video form
 def display_predictions(model, input_shape, class_labels):
@@ -76,8 +69,21 @@ def display_predictions(model, input_shape, class_labels):
             label = f"Predicted: {predicted_label}"
             cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-            # Highlight detected movements
-            cv2.rectangle(frame, (10, 10), (frame.shape[1] - 10, frame.shape[0] - 10), (0, 255, 0), 2)
+            # Highlight detected movements with different colors
+            color = (0, 255, 0)  # Default color (green)
+            if predicted_label == "drinking":
+                color = (255, 0, 0)  # Red
+            elif predicted_label == "eating":
+                color = (0, 255, 255)  # Yellow
+            elif predicted_label == "running":
+                color = (255, 255, 0)  # Cyan
+            elif predicted_label == "walking":
+                color = (255, 0, 255)  # Magenta
+            elif predicted_label == "jumping":
+                color = (0, 255, 0)  # Green
+
+            cv2.rectangle(frame, (10, 10), (frame.shape[1] - 10, frame.shape[0] - 10), color, 2)
+            
             cv2.imshow("Video", frame)
 
             # Remove the first frame from the buffer
@@ -90,5 +96,5 @@ def display_predictions(model, input_shape, class_labels):
     cv2.destroyAllWindows()
 
 # Example usage
-class_labels = ["no movement", "moving", "jumping"]  # Replace with your actual class labels
+class_labels = ["drinking", "eating", "running", "walking", "jumping"]  # Replace with your actual class labels
 display_predictions(model, input_shape, class_labels)
