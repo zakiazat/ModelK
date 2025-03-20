@@ -1,0 +1,45 @@
+# Format: url,category,split,custom_name
+
+# Training videos
+# Sleeping
+https://www.youtube.com/watch?v=diaRCgaPNhk,sleeping,train,sleeping1
+https://www.youtube.com/watch?v=3fA7FP4dCPM,sleeping,train,sleeping2
+
+# Eating
+https://www.youtube.com/watch?v=ooV-OO2Nwx4,eating,train,eating1
+https://www.youtube.com/watch?v=nSIpzZHTwss,eating,train,eating2
+https://www.youtube.com/watch?v=GxejDFpneak,eating,train,eating3
+
+# Walking
+https://www.youtube.com/watch?v=Mol0lrRBy3g,walking,train,walking1
+https://www.youtube.com/watch?v=YzcawvDGe4Y,walking,train,walking2
+https://www.youtube.com/watch?v=84lYjtCfIvY,walking,train,walking3
+
+# Running
+https://www.youtube.com/watch?v=se1RDOPvA8Q,running,train,running1
+https://www.youtube.com/watch?v=KNX67MZLTwE,running,train,running2
+https://www.youtube.com/watch?v=ARylWpUCsGk,running,train,running3
+
+# Jumping
+https://www.youtube.com/watch?v=iSSAk4XCsRA,jumping,train,jumping1
+https://www.youtube.com/watch?v=hkazwWFQ1AA,jumping,train,jumping2
+https://www.youtube.com/watch?v=nwaFHDQP2YU,jumping,train,jumping3
+
+# Standing
+https://www.youtube.com/watch?v=example11,standing,train,standing1
+https://www.youtube.com/watch?v=example12,standing,train,standing2
+
+# Sitting
+https://www.youtube.com/watch?v=example13,sitting,train,sitting1
+https://www.youtube.com/watch?v=example14,sitting,train,sitting2
+
+# Validation videos
+https://www.youtube.com/watch?v=EIwnIW8-fhg,sleeping,val,sleeping_val1
+https://www.youtube.com/watch?v=IvID_T2KXrw,eating,val,eating_val1
+https://www.youtube.com/watch?v=dIyABsJD6Qw,eating,val,eating_val2
+https://www.youtube.com/watch?v=WvhYuDvH17I,walking,val,walking_val1
+https://www.youtube.com/watch?v=65fIV7EwBTc,running,val,running_val1
+https://www.youtube.com/watch?v=GMrM_kGnmns,running,val,running_val2
+https://www.youtube.com/shorts/OMjgafWIxho,jumping,val,jumping_val1
+https://www.youtube.com/watch?v=example20,standing,val,standing_val1
+https://www.youtube.com/watch?v=example21,sitting,val,sitting_val1

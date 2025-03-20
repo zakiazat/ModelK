@@ -1,0 +1,23 @@
+dataset:
+  name: "human_actions"
+  num_classes: 7
+  class_names: ["walking", "running", "eating", "sleeping", "jumping", "standing", "sitting"]
+  train_path: "data/train"
+  val_path: "data/val"
+  frame_size: [224, 224]  # Height, Width
+  clip_length: 16  # Number of frames per clip
+
+model:
+  name: "Conv3D"
+  input_shape: [16, 224, 224, 3]  # [frames, height, width, channels]
+  base_filters: 64
+  num_classes: 7
+  input_channels: 3  # RGB input
+
+training:
+  batch_size: 8
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  save_dir: "checkpoints"
+  log_dir: "logs"
